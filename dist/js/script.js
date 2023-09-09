@@ -43,3 +43,10 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
     darkToggle.checked = false;
   }
 
+
+// close alert
+// const closeAlert = document.querySelector('.close-btn');
+// const alert = document.querySelector('#alert')
+// closeAlert.addEventListener('click', function(){
+//     alert.classList.add('hidden')
+// })
