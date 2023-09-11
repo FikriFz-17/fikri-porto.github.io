@@ -182,8 +182,8 @@
                 </div>
 
             </div>
-            <!-- Alert -->
-            <div class="bg-green-200 border-2 border-green-500 px-2 py-3 mx-4 mb-4 lg:mx-16 relative hidden " id="alert">
+            <!-- Alert succes -->
+            <div class="bg-green-200 border-2 border-green-500 px-2 py-3 mx-4 mb-4 lg:mx-16 relative hidden " id="alert-s">
                 <div class="flex items-center flex-wrap">
                     <div class="items-center px-2 scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-green-500" viewBox="0 0 16 16">
@@ -193,11 +193,26 @@
                     <strong class="font-bold max-[768px]:text-base text-green-600">Succes!</strong>
                     <span class="font-semibold max-[768px]:text-sm lg:block sm:block px-2">Your response already submitted</span>
                 </div>
-                <span class="absolute top-0 bottom-0 right-0 items-center my-3 border rounded-lg hover:bg-emerald-300 close-btn">
+                <span class="absolute top-0 bottom-0 right-0 items-center my-3 border rounded-lg hover:bg-emerald-300 close-btnS">
                     <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
                   </span>
             </div>
-            <!-- Alert -->
+            <!-- Alert succes -->
+
+            <!-- Alert failed -->
+            <div class="bg-red-200 border-2 border-red-500 px-2 py-3 mx-4 mb-4 lg:mx-16 relative hidden" id="alert-f">
+                <div class="flex items-center flex-wrap">
+                    <div class="items-center px-2 scale-75">
+                        <?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.0//EN'  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'><svg height="32" style="overflow:visible;enable-background:new 0 0 32 32" viewBox="0 0 32 32" width="32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><g id="Error_1_"><g id="Error"><circle cx="16" cy="16" id="BG" r="16" style="fill:#D72828;"/><path d="M14.5,25h3v-3h-3V25z M14.5,6v13h3V6H14.5z" id="Exclamatory_x5F_Sign" style="fill:#E6E6E6;"/></g></g></g></svg>
+                    </div>
+                    <strong class="font-bold max-[768px]:text-base text-red-600">Error!</strong>
+                    <span class="font-semibold max-[768px]:text-sm lg:block sm:block px-2">Your response did not submitted</span>
+                </div>
+                <span class="absolute top-0 bottom-0 right-0 items-center my-3 flex border-transparent rounded-lg hover:bg-red-300 close-btnF">
+                    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                  </span>
+            </div>
+            <!-- Alert failed -->
             <form name="contact-form">
                 <div class="w-full px-4 mb-8 lg:px-16">
                     <label for="name" class=" text-base text-main font-semibold">Name</label>
@@ -308,21 +323,41 @@
         const form = document.forms['contact-form'];
         const btnSubmit = document.querySelector('.btn-submit');
         const btnLoading = document.querySelector('.btn-loading');
-        const alert = document.querySelector('#alert');
-        const closeAlert = document.querySelector('.close-btn');
+        const alertS = document.querySelector('#alert-s');
+        const alertF = document.querySelector('#alert-f')
+        const closeAlertS = document.querySelector('.close-btnS');
+        const closeAlertF = document.querySelector('.close-btnF');
+        const nama = document.querySelector('input[name="nama"]');
+        const email = document.querySelector('input[name="email"]');
+        const comment = document.querySelector('textarea[name="pesan"]');
+
+
+        const alertFail = () => {
+            alertF.classList.remove('hidden');
+        }
+
+
         form.addEventListener('submit', e => {
           e.preventDefault();
+
+          if (nama.value === "" || email.value === "" || comment.value === ""){
+            alertFail();
+            closeAlertF.addEventListener('click', function(){
+                alertF.classList.add('hidden')
+            })
+            return;
+          }
+
             btnLoading.classList.toggle('hidden');
             btnSubmit.classList.toggle('hidden');
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
             .then(response => {
                 btnLoading.classList.toggle('hidden');
                 btnSubmit.classList.toggle('hidden');
-                alert.classList.remove('hidden')
-                closeAlert.addEventListener('click', function(){
-                    alert.classList.add('hidden');
+                alertS.classList.remove('hidden')
+                closeAlertS.addEventListener('click', function(){
+                    alertS.classList.add('hidden');
                 })
-                // alert("Succes! Your response already submitted")
                 form.reset();
                 console.log('Success!', response)
             })
