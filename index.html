@@ -190,8 +190,8 @@
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                           </svg>
                     </div>
-                    <strong class="font-bold max-[768px]:text-base text-green-600">Succes!</strong>
-                    <span class="font-semibold max-[768px]:text-sm lg:block sm:block px-2">Your response already submitted</span>
+                    <strong id="alert-1" class="font-bold max-[768px]:text-base text-green-600">Succes!</strong>
+                    <span id="alert-2" class="font-semibold max-[768px]:text-sm lg:block sm:block px-2">Your response already submitted</span>
                 </div>
                 <span class="absolute top-0 bottom-0 right-0 items-center my-3 border rounded-lg hover:bg-emerald-300 close-btn">
                     <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
@@ -310,8 +310,32 @@
         const btnLoading = document.querySelector('.btn-loading');
         const alert = document.querySelector('#alert');
         const closeAlert = document.querySelector('.close-btn');
+
+        const nama = document.querySelector('input[name="nama"]');
+        const email = document.querySelector('input[name="email"]');
+        const comment = document.querySelector('textarea[name="pesan"]');
+
+        const alertSuccess = () => {
+            document.querySelector("#alert-1").innerText = "Success!";
+            document.querySelector("#alert-2").innerText = "Your response already submitted";
+        }
+
+        const alertFailure = () => {
+            document.querySelector("#alert-1").innerText = "Failed!";
+            document.querySelector("#alert-2").innerText = "Response did not submitted";
+        }
+
         form.addEventListener('submit', e => {
           e.preventDefault();
+
+            if (!nama.value || !email.value || !comment.value) {
+                alertFailure();
+                alert.classList.remove('hidden');
+                return;
+            }
+
+            alertSuccess();
+
             btnLoading.classList.toggle('hidden');
             btnSubmit.classList.toggle('hidden');
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
